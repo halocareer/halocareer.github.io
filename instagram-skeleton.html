@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Instagram Feed Skeleton — IndoInEstonia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    /* ======================================================
+       IndoInEstonia — Instagram Skeleton / Design Reference
+       Gunakan file ini sebagai acuan layout ketika membuat
+       konten carousel baru.
+       ====================================================== */
+
+    :root {
+      --blue:  #1E50DC;
+      --red:   #CF1020;
+      --dark:  #0d0d1a;
+      --gray:  #6b7280;
+      --light: #e5e7eb;
+      --bg:    #f5f7ff;
+      --white: #ffffff;
+      --font:  'Plus Jakarta Sans', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font);
+      background: #111827;
+      color: var(--white);
+      padding: 2rem;
+      min-height: 100vh;
+    }
+
+    /* ======== PAGE HEADER ======== */
+    .page-header {
+      max-width: 1280px;
+      margin: 0 auto 3rem;
+    }
+
+    .page-header h1 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+
+    .page-header p {
+      color: rgba(255,255,255,0.55);
+      font-size: 0.9rem;
+    }
+
+    .badge {
+      display: inline-block;
+      background: rgba(30,80,220,0.25);
+      color: #93b4ff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.3rem 0.75rem;
+      border-radius: 100px;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* ======== SECTION HEADER ======== */
+    .sk-section {
+      max-width: 1280px;
+      margin: 0 auto 4rem;
+    }
+
+    .sk-section-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 0.3rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-size: 0.82rem;
+    }
+
+    .sk-section-label {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--white);
+      margin-bottom: 1.75rem;
+    }
+
+    /* ======== SLIDE GRID ======== */
+    .slide-grid {
+      display: flex;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    /* ======== SLIDE PREVIEW WRAPPER ======== */
+    .slide-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .slide-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.4);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .slide-desc {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.5);
+      max-width: 270px;
+      line-height: 1.4;
+    }
+
+    /* ======== THE SLIDES (270×270 preview at 25% scale of 1080×1080) ======== */
+    .slide {
+      width: 270px;
+      height: 270px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 8px;
+      flex-shrink: 0;
+      font-size: 0.25rem; /* base: everything inside is 25% scale */
+    }
+
+    /* ======================================================
+       SLIDE TYPE 1: COVER
+       - Dipakai untuk slide pertama semua carousel
+       - Warna: gradient biru gelap, aksen merah
+       ====================================================== */
+    .slide-cover {
+      background: linear-gradient(145deg, #0a1628 0%, #0d1f50 60%, #1a0a1a 100%);
+    }
+
+    .cover-brand {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      right: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-badge-mini {
+      background: rgba(255,255,255,0.12);
+      border-radius: 4px;
+      padding: 3px 6px;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .brand-dot-mini {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+
+    .brand-dot-red  { background: var(--red); }
+    .brand-dot-blue { background: #0072CE; }
+
+    .brand-name-mini {
+      font-size: 6px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.8);
+      letter-spacing: 0.03em;
+    }
+
+    .cover-slide-num {
+      font-size: 6px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.4);
+    }
+
+    /* Content zone labels — the big placeholders */
+    .zone {
+      position: absolute;
+      border: 1px dashed rgba(255,255,255,0.2);
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 2px;
+    }
+
+    .zone-tag {
+      font-size: 4px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .zone-hint {
+      font-size: 4px;
+      font-weight: 500;
+      opacity: 0.6;
+    }
+
+    /* Zone colors */
+    .z-title  { border-color: #60a5fa; }
+    .z-sub    { border-color: #a3a3a3; }
+    .z-tag    { border-color: #f472b6; }
+    .z-cta    { border-color: #34d399; }
+    .z-item   { border-color: #fbbf24; }
+    .z-icon   { border-color: #c084fc; }
+    .z-footer { border-color: rgba(255,255,255,0.2); }
+
+    /* Cover zones */
+    .cover-zone-tag {
+      left: 14px; top: 50px;
+      width: 50px; height: 10px;
+    }
+
+    .cover-zone-title {
+      left: 14px; top: 65px;
+      width: 200px; height: 45px;
+    }
+
+    .cover-zone-sub {
+      left: 14px; top: 116px;
+      width: 170px; height: 18px;
+    }
+
+    .cover-zone-cta {
+      left: 14px; top: 142px;
+      width: 70px; height: 12px;
+    }
+
+    .cover-zone-visual {
+      right: 14px; top: 65px;
+      width: 38px; height: 90px;
+      border-color: #c084fc;
+    }
+
+    /* Red line footer (always present) */
+    .red-line-mini {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 8px;
+      background: linear-gradient(90deg, var(--red) 50%, #f5f7ff 50%);
+    }
+
+    /* ======================================================
+       SLIDE TYPE 2: LIST / CHECKLIST
+       - Dipakai untuk konten step-by-step, checklist, numbered
+       - Background: putih/very light
+       ====================================================== */
+    .slide-list {
+      background: #f5f7ff;
+    }
+
+    .list-items-zone {
+      position: absolute;
+      left: 14px; right: 14px;
+      top: 55px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .list-item-row {
+      width: 100%;
+      height: 20px;
+      background: var(--white);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 0 6px;
+    }
+
+    .list-check {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(30,80,220,0.15);
+      flex-shrink: 0;
+    }
+
+    .list-text-bar {
+      height: 4px;
+      border-radius: 2px;
+      background: rgba(30,80,220,0.12);
+      flex: 1;
+    }
+
+    .list-text-bar.short { max-width: 60%; }
+
+    /* ======================================================
+       SLIDE TYPE 3: DETAIL / TIPS
+       - Satu topik utama + penjelasan + highlight box
+       - Background: putih
+       ====================================================== */
+    .slide-detail {
+      background: var(--white);
+    }
+
+    .detail-highlight {
+      position: absolute;
+      left: 14px; right: 14px;
+      top: 55px;
+      height: 55px;
+      background: rgba(30,80,220,0.06);
+      border-left: 3px solid var(--blue);
+      border-radius: 0 6px 6px 0;
+    }
+
+    .detail-paras {
+      position: absolute;
+      left: 14px; right: 14px;
+      top: 118px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .para-bar {
+      height: 3px;
+      background: rgba(13,13,26,0.1);
+      border-radius: 2px;
+    }
+
+    .para-bar.w100 { width: 100%; }
+    .para-bar.w80  { width: 80%; }
+    .para-bar.w90  { width: 90%; }
+    .para-bar.w65  { width: 65%; }
+
+    /* ======================================================
+       SLIDE TYPE 4: QUOTE / INSIGHT
+       - Pull quote atau personal insight besar
+       - Background: dark (biru gelap atau hitam)
+       ====================================================== */
+    .slide-quote {
+      background: var(--dark);
+    }
+
+    .quote-marks {
+      position: absolute;
+      top: 30px;
+      left: 20px;
+      font-size: 40px;
+      line-height: 1;
+      color: rgba(30,80,220,0.4);
+      font-family: Georgia, serif;
+    }
+
+    .quote-zone-text {
+      left: 20px; right: 20px;
+      top: 60px;
+      height: 80px;
+    }
+
+    .quote-zone-attr {
+      left: 20px; right: 20px;
+      top: 150px;
+      height: 14px;
+    }
+
+    .quote-accent-bar {
+      position: absolute;
+      left: 20px;
+      bottom: 30px;
+      width: 30px;
+      height: 3px;
+      background: var(--red);
+      border-radius: 2px;
+    }
+
+    /* ======================================================
+       SLIDE TYPE 5: STATS / DATA
+       - Angka besar, fakta, perbandingan
+       - Background: biru
+       ====================================================== */
+    .slide-stats {
+      background: var(--blue);
+    }
+
+    .stats-grid-mini {
+      position: absolute;
+      left: 14px; right: 14px;
+      top: 55px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .stat-box {
+      background: rgba(255,255,255,0.12);
+      border-radius: 5px;
+      height: 55px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+    }
+
+    .stat-num-bar {
+      width: 40px;
+      height: 10px;
+      background: rgba(255,255,255,0.5);
+      border-radius: 2px;
+    }
+
+    .stat-lbl-bar {
+      width: 30px;
+      height: 4px;
+      background: rgba(255,255,255,0.25);
+      border-radius: 2px;
+    }
+
+    /* ======================================================
+       SLIDE TYPE 6: CTA (Call to Action)
+       - Slide terakhir semua carousel
+       - Follow, save, share, comment
+       ====================================================== */
+    .slide-cta {
+      background: linear-gradient(145deg, #f5f7ff 0%, #eef1ff 100%);
+    }
+
+    .cta-ig-block {
+      position: absolute;
+      left: 50%;
+      top: 50px;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cta-ig-icon {
+      width: 28px;
+      height: 28px;
+      border: 2px solid rgba(255,255,255,0.9);
+      border-radius: 6px;
+    }
+
+    .cta-action-zone {
+      left: 30px; right: 30px;
+      top: 115px;
+      height: 40px;
+    }
+
+    .cta-buttons-zone {
+      left: 14px; right: 14px;
+      top: 165px;
+      height: 18px;
+      display: flex;
+      gap: 4px;
+    }
+
+    .cta-btn-bar {
+      flex: 1;
+      height: 100%;
+      border-radius: 3px;
+    }
+
+    .cta-btn-primary { background: rgba(30,80,220,0.2); }
+    .cta-btn-outline  { background: rgba(30,80,220,0.08); border: 1px solid rgba(30,80,220,0.2); }
+
+    /* ======== COLOR LEGEND ======== */
+    .legend {
+      max-width: 1280px;
+      margin: 0 auto 4rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+
+    .legend h3 {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.5);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 1rem;
+    }
+
+    .legend-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem 2rem;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.6);
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      border: 1.5px solid;
+      flex-shrink: 0;
+    }
+
+    /* ======== DESIGN TOKENS PANEL ======== */
+    .tokens-panel {
+      max-width: 1280px;
+      margin: 0 auto 4rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .token-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      padding: 1rem;
+    }
+
+    .token-swatch {
+      width: 100%;
+      height: 40px;
+      border-radius: 6px;
+      margin-bottom: 0.75rem;
+    }
+
+    .token-name {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 0.2rem;
+    }
+
+    .token-value {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.4);
+      font-family: monospace;
+    }
+
+    .token-use {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.5);
+      margin-top: 0.3rem;
+    }
+
+    /* ======== SLIDE TYPES DESCRIPTION ======== */
+    .type-table {
+      max-width: 1280px;
+      margin: 0 auto 4rem;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .type-table table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+
+    .type-table th {
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.5);
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.75rem 1rem;
+      text-align: left;
+    }
+
+    .type-table td {
+      padding: 0.85rem 1rem;
+      color: rgba(255,255,255,0.7);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      vertical-align: top;
+    }
+
+    .type-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+    .td-name { color: var(--white); font-weight: 700; }
+    .td-pos  { color: rgba(255,255,255,0.4); font-size: 0.78rem; }
+
+    .chip {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+    .chip-blue  { background: rgba(30,80,220,0.25); color: #93b4ff; }
+    .chip-red   { background: rgba(207,16,32,0.25); color: #fca5a5; }
+    .chip-dark  { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.6); }
+    .chip-light { background: rgba(245,247,255,0.15); color: rgba(255,255,255,0.6); }
+  </style>
+</head>
+<body>
+
+<!-- ========= PAGE HEADER ========= -->
+<div class="page-header">
+  <div class="badge">IndoInEstonia — Design Reference</div>
+  <h1>Instagram Feed Skeleton</h1>
+  <p>
+    Referensi desain untuk semua tipe slide carousel. Gunakan ini sebagai panduan
+    ketika membuat konten baru — konten tinggal diisi ke zona yang sudah terdefinisi.
+  </p>
+</div>
+
+<!-- ========= DESIGN TOKENS ========= -->
+<div class="sk-section">
+  <div class="sk-section-title">Design System</div>
+  <div class="sk-section-label">Warna & Tipografi</div>
+
+  <div class="tokens-panel">
+    <div class="token-card">
+      <div class="token-swatch" style="background:#1E50DC;"></div>
+      <div class="token-name">Blue Primary</div>
+      <div class="token-value">#1E50DC</div>
+      <div class="token-use">CTA, aksen, badge, border</div>
+    </div>
+    <div class="token-card">
+      <div class="token-swatch" style="background:#CF1020;"></div>
+      <div class="token-name">Red Indonesia</div>
+      <div class="token-value">#CF1020</div>
+      <div class="token-use">Footer bar, aksen, section tag</div>
+    </div>
+    <div class="token-card">
+      <div class="token-swatch" style="background:#0d0d1a;"></div>
+      <div class="token-name">Dark Text</div>
+      <div class="token-value">#0d0d1a</div>
+      <div class="token-use">Teks utama, background slide quote</div>
+    </div>
+    <div class="token-card">
+      <div class="token-swatch" style="background:#f5f7ff; border:1px solid rgba(255,255,255,0.1);"></div>
+      <div class="token-name">Background Light</div>
+      <div class="token-value">#f5f7ff</div>
+      <div class="token-use">Background slide konten ringan</div>
+    </div>
+    <div class="token-card">
+      <div class="token-swatch" style="background:#ffffff; border:1px solid rgba(255,255,255,0.1);"></div>
+      <div class="token-name">White</div>
+      <div class="token-value">#ffffff</div>
+      <div class="token-use">Card, item box, teks di atas dark</div>
+    </div>
+    <div class="token-card">
+      <div class="token-swatch" style="background: linear-gradient(135deg,#0072CE,#1E50DC,#CF1020,#CC0014);"></div>
+      <div class="token-name">Flag Gradient</div>
+      <div class="token-value">Estonia → Indonesia</div>
+      <div class="token-use">Dekoratif, cover slide</div>
+    </div>
+  </div>
+
+  <div style="color:rgba(255,255,255,0.5);font-size:0.85rem;margin-top:0.5rem;">
+    Font: <strong style="color:white">Plus Jakarta Sans</strong> &mdash;
+    Weight 400 (body), 600 (sub), 700 (heading), 800 (display)
+  </div>
+</div>
+
+<!-- ========= SLIDE TYPE TABLE ========= -->
+<div class="sk-section">
+  <div class="sk-section-title">Struktur Carousel</div>
+  <div class="sk-section-label">Tipe Slide & Fungsinya</div>
+
+  <div class="type-table">
+    <table>
+      <thead>
+        <tr>
+          <th>Tipe</th>
+          <th>Posisi</th>
+          <th>Background</th>
+          <th>Konten yang Diisi</th>
+          <th>Catatan</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="td-name">Cover</td>
+          <td class="td-pos">Slide #1 (selalu)</td>
+          <td><span class="chip chip-dark">Biru gelap gradient</span></td>
+          <td>Tag kategori, judul besar, sub-judul, nomor slide, visual/ikon</td>
+          <td>Headline harus bisa berdiri sendiri sebagai hook</td>
+        </tr>
+        <tr>
+          <td class="td-name">List / Checklist</td>
+          <td class="td-pos">Slide #2-#4</td>
+          <td><span class="chip chip-light">Light (#f5f7ff)</span></td>
+          <td>Judul kecil, 3-5 item checklist/numbered list, ikon per item</td>
+          <td>Maksimal 5 item per slide agar tidak padat</td>
+        </tr>
+        <tr>
+          <td class="td-name">Detail / Tips</td>
+          <td class="td-pos">Slide #2-#4</td>
+          <td><span class="chip chip-light">White</span></td>
+          <td>Satu topik, highlight box (blockquote), 2-3 paragraf pendek</td>
+          <td>Cocok untuk penjelasan satu langkah atau satu tips</td>
+        </tr>
+        <tr>
+          <td class="td-name">Quote / Insight</td>
+          <td class="td-pos">Slide tengah</td>
+          <td><span class="chip chip-dark">Dark (#0d0d1a)</span></td>
+          <td>Satu kalimat kuat, atribusi (misal: "Bulan ke-1 di Tallinn")</td>
+          <td>Dipakai sebagai "breather" di tengah konten teknis</td>
+        </tr>
+        <tr>
+          <td class="td-name">Stats / Data</td>
+          <td class="td-pos">Slide tengah</td>
+          <td><span class="chip chip-blue">Blue (#1E50DC)</span></td>
+          <td>2-4 angka/fakta besar, label singkat per angka</td>
+          <td>Gunakan untuk timeline, biaya, durasi proses, dsb.</td>
+        </tr>
+        <tr>
+          <td class="td-name">CTA</td>
+          <td class="td-pos">Slide terakhir (selalu)</td>
+          <td><span class="chip chip-light">Light (#f5f7ff)</span></td>
+          <td>Ajakan follow/save/share, akun @IndoInEstonia, link ke blog</td>
+          <td>Selalu ada. Bisa tambah "simpan untuk nanti"</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ========= SLIDE PREVIEWS ========= -->
+<div class="sk-section">
+  <div class="sk-section-title">Visual Reference</div>
+  <div class="sk-section-label">Preview Layout Tiap Tipe Slide</div>
+
+  <div class="slide-grid">
+
+    <!-- TYPE 1: COVER -->
+    <div class="slide-wrap">
+      <div class="slide-label">Tipe 1 — Cover</div>
+      <div class="slide slide-cover">
+        <!-- Brand badge -->
+        <div class="cover-brand">
+          <div class="brand-badge-mini">
+            <div class="brand-dot-mini brand-dot-red"></div>
+            <div class="brand-dot-mini brand-dot-blue"></div>
+            <span class="brand-name-mini">IndoInEstonia</span>
+          </div>
+          <span class="cover-slide-num">01 / 06</span>
+        </div>
+        <!-- Content zones -->
+        <div class="zone z-tag cover-zone-tag">
+          <span class="zone-tag" style="color:#f472b6">Kategori Tag</span>
+        </div>
+        <div class="zone z-title cover-zone-title">
+          <span class="zone-tag" style="color:#60a5fa">Judul Utama</span>
+          <span class="zone-hint">font-size besar, bold 800</span>
+        </div>
+        <div class="zone z-sub cover-zone-sub">
+          <span class="zone-tag" style="color:#a3a3a3">Sub-judul / deskripsi singkat</span>
+        </div>
+        <div class="zone z-cta cover-zone-cta">
+          <span class="zone-tag" style="color:#34d399">CTA pill</span>
+        </div>
+        <div class="zone z-icon cover-zone-visual">
+          <span class="zone-tag" style="color:#c084fc">Ikon / Visual</span>
+          <span class="zone-hint">emoji atau ilustrasi</span>
+        </div>
+        <div class="red-line-mini"></div>
+      </div>
+      <div class="slide-desc">Slide pertama. Hook yang kuat. Judul harus bisa berdiri sendiri.</div>
+    </div>
+
+    <!-- TYPE 2: LIST -->
+    <div class="slide-wrap">
+      <div class="slide-label">Tipe 2 — List / Checklist</div>
+      <div class="slide slide-list">
+        <div class="cover-brand" style="top:10px;left:10px;right:10px;">
+          <div class="brand-badge-mini" style="background:rgba(30,80,220,0.08);">
+            <div class="brand-dot-mini brand-dot-red"></div>
+            <div class="brand-dot-mini brand-dot-blue"></div>
+            <span class="brand-name-mini" style="color:#0d0d1a;">IndoInEstonia</span>
+          </div>
+          <span class="cover-slide-num" style="color:#6b7280;">02 / 06</span>
+        </div>
+
+        <div class="zone z-title" style="left:10px;right:10px;top:30px;height:18px;">
+          <span class="zone-tag" style="color:#60a5fa">Judul Slide</span>
+        </div>
+
+        <div class="list-items-zone">
+          <div class="list-item-row">
+            <div class="list-check"></div>
+            <div class="list-text-bar"></div>
+          </div>
+          <div class="list-item-row">
+            <div class="list-check"></div>
+            <div class="list-text-bar short"></div>
+          </div>
+          <div class="list-item-row">
+            <div class="list-check"></div>
+            <div class="list-text-bar"></div>
+          </div>
+          <div class="list-item-row">
+            <div class="list-check"></div>
+            <div class="list-text-bar short"></div>
+          </div>
+          <div class="list-item-row">
+            <div class="list-check"></div>
+            <div class="list-text-bar"></div>
+          </div>
+        </div>
+
+        <div class="red-line-mini"></div>
+      </div>
+      <div class="slide-desc">Checklist atau numbered list. Maks 5 item agar tidak terlalu padat.</div>
+    </div>
+
+    <!-- TYPE 3: DETAIL -->
+    <div class="slide-wrap">
+      <div class="slide-label">Tipe 3 — Detail / Tips</div>
+      <div class="slide slide-detail">
+        <div class="cover-brand" style="top:10px;left:10px;right:10px;">
+          <div class="brand-badge-mini" style="background:rgba(30,80,220,0.08);">
+            <div class="brand-dot-mini brand-dot-red"></div>
+            <div class="brand-dot-mini brand-dot-blue"></div>
+            <span class="brand-name-mini" style="color:#0d0d1a;">IndoInEstonia</span>
+          </div>
+          <span class="cover-slide-num" style="color:#6b7280;">03 / 06</span>
+        </div>
+
+        <div class="zone z-title" style="left:10px;right:10px;top:30px;height:16px;">
+          <span class="zone-tag" style="color:#60a5fa">Judul / Topik</span>
+        </div>
+
+        <div class="detail-highlight">
+          <div class="zone z-item" style="position:absolute;inset:4px;border:1px dashed rgba(30,80,220,0.3);">
+            <span class="zone-tag" style="color:#fbbf24">Highlight / Key Insight</span>
+            <span class="zone-hint">Blockquote, italic</span>
+          </div>
+        </div>
+
+        <div class="detail-paras">
+          <div class="para-bar w100"></div>
+          <div class="para-bar w90"></div>
+          <div class="para-bar w80"></div>
+          <div style="height:4px;"></div>
+          <div class="para-bar w100"></div>
+          <div class="para-bar w65"></div>
+        </div>
+
+        <div class="red-line-mini"></div>
+      </div>
+      <div class="slide-desc">Satu topik dengan penjelasan dan highlight box. Cocok untuk satu tips.</div>
+    </div>
+
+    <!-- TYPE 4: QUOTE -->
+    <div class="slide-wrap">
+      <div class="slide-label">Tipe 4 — Quote / Insight</div>
+      <div class="slide slide-quote">
+        <div class="cover-brand" style="top:10px;left:10px;right:10px;">
+          <div class="brand-badge-mini">
+            <div class="brand-dot-mini brand-dot-red"></div>
+            <div class="brand-dot-mini brand-dot-blue"></div>
+            <span class="brand-name-mini">IndoInEstonia</span>
+          </div>
+          <span class="cover-slide-num">04 / 06</span>
+        </div>
+
+        <div class="quote-marks">"</div>
+
+        <div class="zone z-title quote-zone-text">
+          <span class="zone-tag" style="color:#60a5fa">Kalimat utama / insight kuat</span>
+          <span class="zone-hint">1-2 kalimat, font besar</span>
+        </div>
+
+        <div class="zone z-sub quote-zone-attr">
+          <span class="zone-tag" style="color:#a3a3a3">Atribusi (opsional)</span>
+        </div>
+
+        <div class="quote-accent-bar"></div>
+        <div class="red-line-mini"></div>
+      </div>
+      <div class="slide-desc">Satu kalimat kuat. Dipakai sebagai breathing room di tengah konten teknis.</div>
+    </div>
+
+    <!-- TYPE 5: STATS -->
+    <div class="slide-wrap">
+      <div class="slide-label">Tipe 5 — Stats / Data</div>
+      <div class="slide slide-stats">
+        <div class="cover-brand" style="top:10px;left:10px;right:10px;">
+          <div class="brand-badge-mini" style="background:rgba(255,255,255,0.15);">
+            <div class="brand-dot-mini brand-dot-red"></div>
+            <div class="brand-dot-mini" style="background:white;"></div>
+            <span class="brand-name-mini">IndoInEstonia</span>
+          </div>
+          <span class="cover-slide-num">05 / 06</span>
+        </div>
+
+        <div class="zone z-title" style="left:10px;right:10px;top:30px;height:16px;border-color:rgba(255,255,255,0.3);">
+          <span class="zone-tag" style="color:#93b4ff">Judul / Konteks Data</span>
+        </div>
+
+        <div class="stats-grid-mini">
+          <div class="stat-box">
+            <div class="stat-num-bar"></div>
+            <div class="stat-lbl-bar"></div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num-bar"></div>
+            <div class="stat-lbl-bar"></div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num-bar"></div>
+            <div class="stat-lbl-bar"></div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num-bar"></div>
+            <div class="stat-lbl-bar"></div>
+          </div>
+        </div>
+
+        <div class="zone z-sub" style="left:10px;right:10px;top:178px;height:12px;border-color:rgba(255,255,255,0.2);">
+          <span class="zone-tag" style="color:rgba(255,255,255,0.4)">Catatan / sumber data</span>
+        </div>
+
+        <div class="red-line-mini" style="background:linear-gradient(90deg,white 50%,rgba(255,255,255,0.2) 50%);"></div>
+      </div>
+      <div class="slide-desc">Angka, durasi, biaya, perbandingan. Gunakan 2-4 stat saja.</div>
+    </div>
+
+    <!-- TYPE 6: CTA -->
+    <div class="slide-wrap">
+      <div class="slide-label">Tipe 6 — CTA (Slide Terakhir)</div>
+      <div class="slide slide-cta">
+        <div class="cover-brand" style="top:10px;left:10px;right:10px;">
+          <div class="brand-badge-mini" style="background:rgba(30,80,220,0.1);">
+            <div class="brand-dot-mini brand-dot-red"></div>
+            <div class="brand-dot-mini brand-dot-blue"></div>
+            <span class="brand-name-mini" style="color:#0d0d1a;">IndoInEstonia</span>
+          </div>
+          <span class="cover-slide-num" style="color:#6b7280;">06 / 06</span>
+        </div>
+
+        <div class="cta-ig-block">
+          <div class="cta-ig-icon"></div>
+        </div>
+
+        <div class="zone z-cta cta-action-zone" style="position:absolute;">
+          <span class="zone-tag" style="color:#34d399">Teks CTA utama</span>
+          <span class="zone-hint">Follow / Save / Bagikan</span>
+        </div>
+
+        <div class="zone z-sub" style="position:absolute;left:30px;right:30px;top:146px;height:14px;">
+          <span class="zone-tag" style="color:#a3a3a3">Username @IndoInEstonia</span>
+        </div>
+
+        <div class="cta-buttons-zone" style="position:absolute;">
+          <div class="cta-btn-bar cta-btn-primary"></div>
+          <div class="cta-btn-bar cta-btn-outline"></div>
+        </div>
+
+        <div class="red-line-mini"></div>
+      </div>
+      <div class="slide-desc">Selalu slide terakhir. Ajakan follow, save, atau baca versi lengkap di blog.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ========= ZONE LEGEND ========= -->
+<div class="legend">
+  <h3>Keterangan Zona (Border Warna)</h3>
+  <div class="legend-grid">
+    <div class="legend-item">
+      <div class="legend-dot" style="border-color:#60a5fa;"></div>
+      Judul / Headline
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="border-color:#a3a3a3;"></div>
+      Sub-judul / Atribusi
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="border-color:#f472b6;"></div>
+      Tag Kategori
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="border-color:#34d399;"></div>
+      CTA / Tombol
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="border-color:#fbbf24;"></div>
+      Item List / Highlight
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="border-color:#c084fc;"></div>
+      Visual / Ikon / Ilustrasi
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="border-color:rgba(255,255,255,0.2);"></div>
+      Footer / Catatan
+    </div>
+  </div>
+</div>
+
+<!-- ========= CAROUSEL TEMPLATE RULES ========= -->
+<div class="sk-section">
+  <div class="sk-section-title">Panduan</div>
+  <div class="sk-section-label">Aturan Membuat Carousel Baru</div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;">
+    <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:1.25rem;">
+      <div style="color:#60a5fa;font-size:0.75rem;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.5rem;">Jumlah Slide</div>
+      <div style="color:white;font-weight:700;margin-bottom:0.4rem;">5 sampai 7 slide per carousel</div>
+      <div style="color:rgba(255,255,255,0.5);font-size:0.82rem;">Slide 1 = Cover selalu. Slide terakhir = CTA selalu. Konten di tengah 3-5 slide.</div>
+    </div>
+
+    <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:1.25rem;">
+      <div style="color:#f472b6;font-size:0.75rem;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.5rem;">Penulisan</div>
+      <div style="color:white;font-weight:700;margin-bottom:0.4rem;">Jangan pakai em dash atau "not only"</div>
+      <div style="color:rgba(255,255,255,0.5);font-size:0.82rem;">Kedua hal itu terasa AI-generated. Pakai bahasa Indonesia yang natural dan personal.</div>
+    </div>
+
+    <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:1.25rem;">
+      <div style="color:#34d399;font-size:0.75rem;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.5rem;">Teks per slide</div>
+      <div style="color:white;font-weight:700;margin-bottom:0.4rem;">Maksimal 30-40 kata per slide</div>
+      <div style="color:rgba(255,255,255,0.5);font-size:0.82rem;">Instagram dibaca sambil scroll. Satu slide = satu ide. Jangan terlalu banyak teks.</div>
+    </div>
+
+    <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:1.25rem;">
+      <div style="color:#fbbf24;font-size:0.75rem;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.5rem;">Ukuran Canvas</div>
+      <div style="color:white;font-weight:700;margin-bottom:0.4rem;">1080 &times; 1080 px</div>
+      <div style="color:rgba(255,255,255,0.5);font-size:0.82rem;">Square format untuk feed. Semua slide dalam satu carousel harus ukuran yang sama.</div>
+    </div>
+
+    <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:1.25rem;">
+      <div style="color:#c084fc;font-size:0.75rem;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.5rem;">Brand Element</div>
+      <div style="color:white;font-weight:700;margin-bottom:0.4rem;">Badge IndoInEstonia + nomor slide</div>
+      <div style="color:rgba(255,255,255,0.5);font-size:0.82rem;">Selalu ada di pojok kiri atas (badge) dan kanan atas (X/Y). Red-line footer selalu di bawah.</div>
+    </div>
+
+    <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:1.25rem;">
+      <div style="color:#93b4ff;font-size:0.75rem;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.5rem;">Export</div>
+      <div style="color:white;font-weight:700;margin-bottom:0.4rem;">Gunakan export-all-slides.html</div>
+      <div style="color:rgba(255,255,255,0.5);font-size:0.82rem;">Buka di Chrome, klik Export. Output: PNG 1080&times;1080 per slide via html2canvas.</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
