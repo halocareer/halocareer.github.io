@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>#003 A Mock Technical Interview for Data Analysts: SQL, Python, and Designing an A/B Test — Halo Career</title>
+  <meta name="description" content="A reconstructed technical interview dialogue for a data analyst role: the grain trap in SQL, Python coding, and designing an A/B test experiment. With notes on why each answer is shaped the way it is." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ========= NAVIGATION ========= -->
+<nav>
+  <div class="nav-inner">
+    <a href="index-en.html" class="nav-logo">
+      Halo<span class="dot">.</span>Career
+      <span class="sub">by @IndoInEstonia</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index-en.html">Home</a></li>
+      <li><a href="#">Journey</a></li>
+      <li><a href="#" class="active">Blog</a></li>
+      <li><a href="#">About</a></li>
+    </ul>
+    <a href="https://instagram.com/indoinestonia" target="_blank" class="nav-ig">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+        <circle cx="12" cy="12" r="3.5"/>
+        <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/>
+      </svg>
+      @IndoInEstonia
+    </a>
+
+    <div class="lang-toggle">
+      <a href="post-003.html">ID</a>
+      <a href="post-003-en.html" class="active">EN</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ========= POST ========= -->
+<main class="post-page">
+
+  <div class="breadcrumb">
+    <a href="index-en.html">Home</a>
+    <span class="sep">/</span>
+    <a href="#">Job Hunting</a>
+    <span class="sep">/</span>
+    <span>Mock Technical Interview</span>
+  </div>
+
+  <header class="post-header">
+    <span class="post-num-large">#003</span>
+    <span class="post-tag">Job Hunting</span>
+    <h1>A Mock Technical Interview for Data Analysts: SQL, Python, and Designing an A/B Test</h1>
+    <div class="post-meta">
+      <span>August 2026</span>
+      <span class="sep">·</span>
+      <span>14 min read</span>
+    </div>
+  </header>
+
+  <div class="post-divider"></div>
+
+  <article class="post-content">
+
+    <p>
+      In the previous article I summarized the five stages of the data analyst
+      hiring process I went through, and the types of use cases that came up.
+      Now I want to reconstruct the technical interview as a dialogue, so the
+      flow is easier to picture. This isn't a word-for-word transcript, but it's
+      rebuilt from notes I took right after the session, so the flow is
+      representative of what actually happened.
+    </p>
+
+    <p>
+      The interviewer was a Lead Data Analyst from the relevant team. The session
+      ran about an hour, split into SQL, Python, then A/B testing and causal
+      inference. I've added notes in a few places to explain what was actually
+      being tested.
+    </p>
+
+    <h2>Part 1: SQL</h2>
+
+    <p>
+      <strong>Interviewer:</strong> "Okay, I'll give you two tables. The first is
+      called city_cost, with columns date, channel, city, and cost. The second is
+      called order_rev, with date, channel, city, order_id, and revenue. Calculate
+      ROI by date and channel. ROI is revenue divided by cost."
+    </p>
+
+    <p>
+      <strong>Me:</strong> "Before I write the query, can I check the grain of
+      each table first? From the column names, city_cost looks like it's already
+      at the date-channel-city level, but order_rev has an order_id, so it's
+      probably at the order level, not date-channel-city."
+    </p>
+
+    <p>
+      <strong>Interviewer:</strong> "Correct. Why does that matter?"
+    </p>
+
+    <p>
+      <strong>Me:</strong> "Because if I JOIN these two tables as they are, one
+      row in city_cost could match many rows in order_rev. Revenue would get
+      counted multiple times, so the resulting ROI could come out much higher
+      than it actually is. The right approach is to aggregate order_rev to the
+      date-channel-city grain first, SUM(revenue), then JOIN it to city_cost,
+      which is already at that same grain."
+    </p>
+
+    <blockquote>
+      Note: this opening question looks simple but is actually a classic grain
+      trap. The interviewer didn't need me to jump straight into writing a query.
+      What they're looking for is whether I pause to check the data structure
+      first, instead of reflexively joining two tables as-is.
+    </blockquote>
+
+    <p>
+      <strong>Interviewer:</strong> "Good. Now, what if there's a row with revenue
+      but the cost is zero, or even NULL?"
+    </p>
+
+    <p>
+      <strong>Me:</strong> "Those two conditions mean different things, so I'd
+      check with the data team before handling them blindly. Zero cost most
+      likely means organic traffic, genuinely no spend on that channel. NULL cost
+      usually signals missing data, either a pipeline that hasn't run yet or some
+      tracking issue. For the ROI calculation, if cost is zero, I wouldn't let the
+      result come out as infinity. I'd set ROI to NULL or flag it specifically, so
+      it doesn't get misread as an unusually strong-performing channel."
+    </p>
+
+    <p>
+      <strong>Interviewer:</strong> "Okay, last one for SQL. Get the two
+      highest-ROI days for each channel."
+    </p>
+
+    <p>
+      <strong>Me:</strong> "I'd use a CTE. First step, calculate daily ROI per
+      channel inside the CTE. Second step, in the outer query, use a window
+      function, PARTITION BY channel, ORDER BY ROI descending, ROW_NUMBER if I
+      need exactly two rows per channel, or RANK if there are tied ROI values that
+      should be allowed to appear more than twice. Finally, filter for rank less
+      than or equal to two."
+    </p>
+
+    <p>
+      <strong>Interviewer:</strong> "Why ROW_NUMBER over RANK?"
+    </p>
+
+    <p>
+      <strong>Me:</strong> "Depends on the requirement. If the requirement is
+      strictly two rows per channel regardless of ties, I'd use ROW_NUMBER. If
+      there are two days with exactly the same ROI and both should be treated as
+      equally important, I'd use RANK, even if that ends up returning more than
+      two rows for a channel."
+    </p>
+
+    <h2>Part 2: Python</h2>
+
+    <p>
+      <strong>Interviewer:</strong> "Write a Python function that returns all
+      divisors of a number n. For example, n = 15 should return [1, 3, 5, 15]."
+    </p>
+
+    <p>
+      <strong>Me:</strong> writes roughly the following while explaining each
+      line.
+    </p>
+
+    <p>
+      "I define a function with one parameter, n. Inside, I set up an empty list
+      to hold the results. I loop i from 1 to n, and at each iteration I check
+      whether n modulo i equals zero, if so, i is a divisor, and I append it to
+      the list. Finally I return the list."
+    </p>
+
+    <p>
+      <strong>Interviewer:</strong> "Can you explain the modulo line again, why
+      is that what's used to check for a divisor?"
+    </p>
+
+    <p>
+      <strong>Me:</strong> "Modulo gives you the remainder of a division. If n
+      divided by i leaves a remainder of zero, that means i divides n evenly, so i
+      is indeed a divisor of n. If the remainder isn't zero, i isn't a divisor."
+    </p>
+
+    <p>
+      <strong>Interviewer:</strong> "Can it be optimized?"
+    </p>
+
+    <p>
+      <strong>Me:</strong> "Yes. Right now I'm looping all the way to n, but
+      divisors always come in pairs. If i is a divisor of n, then n divided by i
+      is also a divisor. So I only need to loop up to the square root of n, and
+      every time I find an i that's a divisor, I also add n divided by i to the
+      list, except when both are equal, which happens at the exact square root."
+    </p>
+
+    <blockquote>
+      Note: this follow-up is actually more important than the code itself. The
+      interviewer wasn't too concerned with whether I had the exact syntax
+      memorized. What's being assessed is whether I can explain the logic
+      clearly and recognize the inefficiency in my own first solution.
+    </blockquote>
+
+    <h2>Part 3: A/B Testing and Causal Inference</h2>
+
+    <p>
+      <strong>Interviewer:</strong> "Now a case study. There's a registration
+      funnel with several steps, and we're seeing a lot of drop-off in the middle
+      step. The idea: if a user has no activity for two hours, send an automated
+      call as a reminder. The goal is to increase registrations. How would you
+      design the experiment?"
+    </p>
+
+    <p>
+      <strong>Me:</strong> "I'd start with a hypothesis: the reminder call will
+      increase funnel completion rate, specifically the transition from that
+      drop-off step to the next one. The population is users who've reached that
+      step but haven't progressed after two hours, and meet the eligibility
+      criteria to be contacted. I'd randomize that population into treatment,
+      which receives the call, and control, which gets the regular communication
+      or nothing at all."
+    </p>
+
+    <p>
+      "For the primary metric, I'd use incremental funnel completion rate, not
+      call pickup rate or click-through rate. The business objective is
+      registration, not how many people pick up the phone. Secondary metrics
+      would be conversion between steps and time to completion. Guardrails I'd
+      monitor: complaints, opt-outs, cost per call, and any sign of negative user
+      experience."
+    </p>
+
+    <p>
+      <strong>Interviewer:</strong> "Good. Now imagine user volume is low, and
+      the MDE you want requires a sample size larger than the available
+      population. What do you do?"
+    </p>
+
+    <p>
+      <strong>Me:</strong> "I wouldn't just say run it longer, because if the
+      population is genuinely small, more time might not fix the problem. First
+      I'd validate whether the MDE I set is actually realistic and
+      business-meaningful, maybe I need to widen it. I'd also consider pooling
+      comparable markets to get a larger population, or using sequential testing
+      or a Bayesian approach that can produce a decision earlier with limited
+      data. If it turns out to be statistically impossible to reach adequate
+      power, I'd communicate that limitation explicitly to stakeholders, rather
+      than pretending the result is conclusive."
+    </p>
+
+    <p>
+      <strong>Interviewer:</strong> "Say the results do show an uplift. How do
+      you decide whether it's worth rolling out?"
+    </p>
+
+    <p>
+      <strong>Me:</strong> "I wouldn't stop at 'the result is statistically
+      significant.' I'd calculate incremental registrations from treatment, then
+      cost per incremental registration. For example, if treatment produces 100
+      incremental registrations at an additional cost of five thousand euros,
+      that's fifty euros per incremental registration. I'd compare that against
+      the economic value of a single registered user, and only then could I say
+      whether it's worth rolling out."
+    </p>
+
+    <p>
+      <strong>Interviewer:</strong> "Last one, how do you know a booking increase
+      is actually because of the campaign, and not something else?"
+    </p>
+
+    <p>
+      <strong>Me:</strong> "Here I'd first separate attribution from causal
+      inference. Attribution is about who gets credit for a booking. Causal
+      inference is about what would have happened if the campaign hadn't run,
+      the counterfactual. The most solid way to get a counterfactual is a
+      randomized experiment with a holdout group. If that's not feasible, there
+      are alternatives like geo experiments, matched controls,
+      difference-in-differences, or synthetic control."
+    </p>
+
+    <p>
+      <strong>Interviewer:</strong> "Is causal inference something you build into
+      the pipeline, or handle ad hoc?"
+    </p>
+
+    <p>
+      <strong>Me:</strong> "Depends on the scale of the campaign. For routine
+      campaigns with a smaller budget, standardized attribution and monitoring
+      are enough, not everything needs sophisticated causal inference. But for
+      strategic campaigns with a bigger budget, I'd go deeper, using a holdout
+      group and causal analysis, because the decisions coming out of that carry
+      much bigger consequences."
+    </p>
+
+    <blockquote>
+      Closing note: throughout this A/B testing section, the pattern I noticed
+      was that the interviewer kept digging one level deeper than my previous
+      answer. A good answer isn't the longest one, it's the one that still holds
+      up when pushed with "and how do you know that's true?"
+    </blockquote>
+
+    <h2>Closing Thoughts</h2>
+
+    <p>
+      What I realized once this session ended: a senior-level technical interview
+      isn't really testing whether you can write a query or code that runs.
+      That's treated as the baseline. What's actually being tested is whether you
+      pause to think before answering, and whether you can hold your logic
+      together when pushed further.
+    </p>
+
+    <p>
+      In the next article I'll reconstruct the business interview, which has a
+      completely different format. Not a single line of code, but just as
+      demanding.
+    </p>
+
+  </article>
+
+  <div class="post-divider"></div>
+
+  <div class="post-tags">
+    <span class="tag-chip">interview-tips</span>
+    <span class="tag-chip">technical-interview</span>
+    <span class="tag-chip">sql</span>
+    <span class="tag-chip">python</span>
+    <span class="tag-chip">ab-testing</span>
+    <span class="tag-chip">working-abroad</span>
+  </div>
+
+  <div class="post-ig-cta">
+    <p>A shorter version of this article is on Instagram. More compact, easy to save.</p>
+    <a href="https://instagram.com/indoinestonia" target="_blank" class="btn btn-primary btn-sm">
+      See it on @IndoInEstonia ↗
+    </a>
+  </div>
+
+  <div class="post-nav" style="margin-top:2rem;">
+    <a href="post-002-en.html" class="post-nav-link prev">
+      <div class="post-nav-label">&larr; Previous</div>
+      <div class="post-nav-title">#002 Five Interview Stages at a Global Ride-Hailing Company</div>
+    </a>
+    <a href="post-004-en.html" class="post-nav-link next">
+      <div class="post-nav-label">Next &rarr;</div>
+      <div class="post-nav-title">#004 A Mock Business Interview for Data Analysts</div>
+    </a>
+  </div>
+
+</main>
+
+<!-- ========= FOOTER ========= -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="nav-logo">
+          Halo<span class="dot" style="color:#1E50DC">.</span>Career
+        </div>
+        <p>Career journey notes from Jakarta to Tallinn. Honest, personal, and hopefully useful.</p>
+      </div>
+      <nav class="footer-nav">
+        <div class="fn-group">
+          <h4>Topics</h4>
+          <ul>
+            <li><a href="#">Job Hunting</a></li>
+            <li><a href="#">Paperwork</a></li>
+            <li><a href="#">First Month</a></li>
+            <li><a href="#">Adapting</a></li>
+          </ul>
+        </div>
+        <div class="fn-group">
+          <h4>More</h4>
+          <ul>
+            <li><a href="index-en.html">Home</a></li>
+            <li><a href="#">All Articles</a></li>
+            <li><a href="https://instagram.com/indoinestonia" target="_blank">@IndoInEstonia</a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Halo Career. Made with &hearts; from Tallinn.</span>
+      <div class="footer-flags">🇮🇩 🤝 🇪🇪</div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
