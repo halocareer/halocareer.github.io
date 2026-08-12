@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>#003 Simulasi Technical Interview Data Analyst: SQL, Python, dan Desain A/B Test — Halo Career</title>
+  <meta name="description" content="Rekonstruksi dialog technical interview data analyst: dari trap grain di SQL, coding Python, sampai mendesain eksperimen A/B testing. Lengkap dengan catatan kenapa tiap jawaban dibentuk seperti itu." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ========= NAVIGATION ========= -->
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      Halo<span class="dot">.</span>Career
+      <span class="sub">by @IndoInEstonia</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="#">Perjalanan</a></li>
+      <li><a href="#" class="active">Blog</a></li>
+      <li><a href="#">Tentang</a></li>
+    </ul>
+    <a href="https://instagram.com/indoinestonia" target="_blank" class="nav-ig">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+        <circle cx="12" cy="12" r="3.5"/>
+        <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/>
+      </svg>
+      @IndoInEstonia
+    </a>
+  </div>
+</nav>
+
+<!-- ========= POST ========= -->
+<main class="post-page">
+
+  <div class="breadcrumb">
+    <a href="index.html">Home</a>
+    <span class="sep">/</span>
+    <a href="#">Mencari Kerja</a>
+    <span class="sep">/</span>
+    <span>Simulasi Technical Interview</span>
+  </div>
+
+  <header class="post-header">
+    <span class="post-num-large">#003</span>
+    <span class="post-tag">Mencari Kerja</span>
+    <h1>Simulasi Technical Interview Data Analyst: SQL, Python, dan Desain A/B Test</h1>
+    <div class="post-meta">
+      <span>Agustus 2026</span>
+      <span class="sep">·</span>
+      <span>14 menit baca</span>
+    </div>
+  </header>
+
+  <div class="post-divider"></div>
+
+  <article class="post-content">
+
+    <p>
+      Di artikel sebelumnya saya sudah rangkum lima tahap rekrutmen data analyst yang
+      saya lalui dan jenis use case yang muncul. Sekarang saya coba rekonstruksi
+      technical interview-nya dalam bentuk dialog, supaya lebih kebayang alurnya
+      seperti apa. Ini bukan transkrip kata per kata, tapi disusun ulang dari catatan
+      saya persis setelah sesi selesai, jadi alurnya representatif dengan yang
+      sebenarnya terjadi.
+    </p>
+
+    <p>
+      Interviewer-nya seorang Lead Data Analyst dari tim terkait. Sesi berlangsung
+      sekitar satu jam, dibagi ke SQL, Python, lalu A/B testing dan causal inference.
+      Saya sisipkan catatan di beberapa bagian untuk jelasin apa yang sebenarnya
+      sedang diuji.
+    </p>
+
+    <h2>Bagian 1: SQL</h2>
+
+    <p>
+      <strong>Interviewer:</strong> "Oke, saya kasih dua tabel. Tabel pertama namanya
+      city_cost, isinya date, channel, city, dan cost. Tabel kedua namanya order_rev,
+      isinya date, channel, city, order_id, dan revenue. Coba hitung ROI per tanggal
+      dan channel. ROI-nya revenue dibagi cost."
+    </p>
+
+    <p>
+      <strong>Saya:</strong> "Sebelum saya tulis query-nya, boleh saya cek dulu grain
+      dari masing-masing tabel? Dari nama kolomnya, city_cost sepertinya sudah di
+      level date-channel-city, tapi order_rev punya order_id, jadi kemungkinan
+      grain-nya di level order, bukan date-channel-city."
+    </p>
+
+    <p>
+      <strong>Interviewer:</strong> "Betul. Kenapa itu penting?"
+    </p>
+
+    <p>
+      <strong>Saya:</strong> "Karena kalau saya langsung JOIN dua tabel ini apa
+      adanya, satu baris di city_cost bisa ketemu banyak baris order di order_rev.
+      Revenue-nya akan terhitung berkali-kali, jadi ROI yang keluar bisa jauh lebih
+      besar dari yang seharusnya. Cara yang benar adalah agregasi dulu order_rev ke
+      grain date-channel-city, SUM(revenue), baru JOIN ke city_cost yang juga sudah di
+      grain yang sama."
+    </p>
+
+    <blockquote>
+      Catatan: ini pertanyaan pembuka yang kelihatan sederhana tapi sebenarnya jebakan
+      grain klasik. Interviewer tidak butuh saya langsung nulis query. Yang dicari
+      adalah apakah saya berhenti sebentar untuk cek struktur data sebelum mulai
+      nulis, bukan langsung reflek JOIN dua tabel begitu saja.
+    </blockquote>
+
+    <p>
+      <strong>Interviewer:</strong> "Bagus. Sekarang, gimana kalau ada baris dengan
+      revenue tapi cost-nya nol, atau malah NULL?"
+    </p>
+
+    <p>
+      <strong>Saya:</strong> "Dua kondisi itu maknanya beda, jadi saya akan tanya
+      dulu ke tim data sebelum asal handle. Cost nol kemungkinan besar berarti
+      traffic organik, memang tidak ada spend untuk channel itu. Cost NULL biasanya
+      menandakan data yang hilang, entah dari pipeline yang belum jalan atau ada
+      masalah tracking. Untuk perhitungan ROI, kalau cost-nya nol, saya tidak akan
+      biarkan hasilnya infinity. Saya akan set ROI jadi NULL atau kasih flag khusus,
+      supaya tidak salah diinterpretasikan sebagai channel dengan performa luar
+      biasa."
+    </p>
+
+    <p>
+      <strong>Interviewer:</strong> "Oke, terakhir untuk SQL. Ambil dua hari dengan
+      ROI tertinggi untuk setiap channel."
+    </p>
+
+    <p>
+      <strong>Saya:</strong> "Saya akan pakai CTE. Langkah pertama hitung ROI harian
+      per channel di dalam CTE. Langkah kedua, di query luar, saya pakai window
+      function, PARTITION BY channel, ORDER BY ROI descending, pakai ROW_NUMBER kalau
+      butuh persis dua baris per channel, atau RANK kalau ada ROI yang sama nilainya
+      dan boleh muncul lebih dari dua. Terakhir filter rank-nya kurang dari sama
+      dengan dua."
+    </p>
+
+    <p>
+      <strong>Interviewer:</strong> "Kenapa pilih ROW_NUMBER daripada RANK?"
+    </p>
+
+    <p>
+      <strong>Saya:</strong> "Tergantung requirement-nya. Kalau requirement-nya
+      benar-benar dua baris per channel tidak peduli ada tie atau tidak, saya pakai
+      ROW_NUMBER. Kalau ada dua hari dengan ROI yang persis sama dan keduanya harus
+      dianggap sama pentingnya, saya pakai RANK, meskipun itu bisa menghasilkan lebih
+      dari dua baris per channel."
+    </p>
+
+    <h2>Bagian 2: Python</h2>
+
+    <p>
+      <strong>Interviewer:</strong> "Tulis fungsi Python yang mengembalikan semua
+      divisor dari sebuah angka n. Misalnya n = 15, hasilnya [1, 3, 5, 15]."
+    </p>
+
+    <p>
+      <strong>Saya:</strong> menulis kira-kira seperti ini sambil menjelaskan tiap
+      baris.
+    </p>
+
+    <p>
+      "Saya buat fungsi dengan satu parameter n. Di dalamnya saya siapkan list kosong
+      untuk menampung hasil. Saya loop i dari 1 sampai n, di setiap iterasi saya cek
+      apakah n modulo i sama dengan nol, kalau iya berarti i itu divisor, saya append
+      ke list. Terakhir return list itu."
+    </p>
+
+    <p>
+      <strong>Interviewer:</strong> "Coba jelaskan lagi baris modulo-nya, kenapa itu
+      yang dipakai untuk cek divisor?"
+    </p>
+
+    <p>
+      <strong>Saya:</strong> "Modulo itu memberi sisa pembagian. Kalau n dibagi i
+      sisanya nol, artinya i habis membagi n tanpa sisa, jadi i memang divisor dari
+      n. Kalau sisanya bukan nol, berarti i bukan divisor."
+    </p>
+
+    <p>
+      <strong>Interviewer:</strong> "Bisa dioptimalkan tidak?"
+    </p>
+
+    <p>
+      <strong>Saya:</strong> "Bisa. Sekarang saya loop sampai n, padahal divisor
+      selalu muncul berpasangan. Kalau i adalah divisor dari n, maka n dibagi i juga
+      divisor. Jadi saya cukup loop sampai akar kuadrat dari n, dan setiap kali ketemu
+      i yang jadi divisor, saya langsung tambahkan juga n dibagi i ke list, kecuali
+      kalau keduanya sama seperti kasus akar kuadrat pas."
+    </p>
+
+    <blockquote>
+      Catatan: bagian follow-up ini yang sebenarnya lebih penting dari kode itu
+      sendiri. Interviewer tidak terlalu peduli apakah saya hafal syntax persis.
+      Yang dinilai adalah apakah saya bisa menjelaskan logikanya dengan bahasa yang
+      jelas dan bisa mengenali sisi inefisiensi dari solusi awal saya sendiri.
+    </blockquote>
+
+    <h2>Bagian 3: A/B Testing dan Causal Inference</h2>
+
+    <p>
+      <strong>Interviewer:</strong> "Sekarang studi kasus. Ada funnel registrasi,
+      terdiri dari beberapa step, dan kita lihat banyak drop-off di step tengah.
+      Idenya, kalau user tidak ada aktivitas selama dua jam, kirim automated call
+      sebagai reminder. Tujuannya meningkatkan registrasi. Bagaimana kamu mendesain
+      eksperimennya?"
+    </p>
+
+    <p>
+      <strong>Saya:</strong> "Saya mulai dari hipotesis dulu: reminder call akan
+      meningkatkan completion rate funnel, khususnya transisi dari step yang
+      drop-off itu ke step berikutnya. Populasinya adalah user yang sudah mencapai
+      step tersebut tapi belum lanjut setelah dua jam, dan memenuhi kriteria
+      eligibility untuk dihubungi. Saya akan randomize populasi itu ke treatment,
+      yang menerima call, dan control, yang menerima komunikasi biasa atau tidak
+      sama sekali."
+    </p>
+
+    <p>
+      "Untuk primary metric, saya pakai incremental completion rate funnel, bukan
+      call pickup rate atau click-through rate. Soalnya objective bisnisnya adalah
+      registrasi, bukan seberapa banyak yang angkat telepon. Secondary metric-nya
+      conversion antar step dan time to completion. Guardrail-nya saya pantau
+      komplain, opt-out, cost per call, dan indikasi pengalaman user yang negatif."
+    </p>
+
+    <p>
+      <strong>Interviewer:</strong> "Bagus. Sekarang bayangkan volume user-nya
+      rendah, dan MDE yang kamu mau butuh sample size lebih besar dari populasi yang
+      tersedia. Apa yang kamu lakukan?"
+    </p>
+
+    <p>
+      <strong>Saya:</strong> "Saya tidak akan langsung bilang jalankan lebih lama
+      saja, karena kalau populasinya memang kecil, menambah waktu belum tentu
+      menyelesaikan masalah. Pertama saya akan validasi apakah MDE yang saya
+      tetapkan itu memang realistis dan bermakna secara bisnis, mungkin saya perlu
+      perbesar MDE-nya. Saya juga akan pertimbangkan pooling market yang sebanding
+      supaya populasi lebih besar, atau pakai pendekatan sequential testing atau
+      Bayesian yang bisa memberi keputusan lebih awal dengan data terbatas. Kalau
+      ternyata secara statistik memang tidak memungkinkan mencapai power yang cukup,
+      saya akan komunikasikan keterbatasan itu secara eksplisit ke stakeholder,
+      daripada berpura-pura hasilnya conclusive."
+    </p>
+
+    <p>
+      <strong>Interviewer:</strong> "Misalkan hasilnya memang menunjukkan uplift.
+      Bagaimana kamu memutuskan apakah ini layak di-rollout?"
+    </p>
+
+    <p>
+      <strong>Saya:</strong> "Saya tidak berhenti di 'hasilnya signifikan secara
+      statistik'. Saya akan hitung incremental registration dari treatment, lalu
+      cost per incremental registration. Misalnya kalau treatment menghasilkan 100
+      incremental registration dengan tambahan cost lima ribu euro, itu berarti
+      lima puluh euro per incremental registration. Saya bandingkan angka itu dengan
+      economic value dari satu registered user, baru saya bisa bilang apakah ini
+      worth it untuk di-rollout atau tidak."
+    </p>
+
+    <p>
+      <strong>Interviewer:</strong> "Terakhir, bagaimana kamu tahu kenaikan booking
+      itu memang karena campaign, bukan faktor lain?"
+    </p>
+
+    <p>
+      <strong>Saya:</strong> "Di sini saya bedakan dulu attribution dengan causal
+      inference. Attribution itu soal siapa yang dapat kredit atas suatu booking.
+      Causal inference itu soal apa yang akan terjadi kalau campaign itu tidak ada,
+      atau disebut counterfactual. Cara paling solid mendapatkan counterfactual
+      adalah randomized experiment dengan holdout group. Kalau itu tidak
+      memungkinkan, ada alternatif seperti geo experiment, matched control,
+      difference-in-differences, atau synthetic control."
+    </p>
+
+    <p>
+      <strong>Interviewer:</strong> "Apakah causal inference ini kamu bangun ke
+      pipeline atau dilakukan ad hoc saja?"
+    </p>
+
+    <p>
+      <strong>Saya:</strong> "Tergantung skala campaign-nya. Untuk campaign rutin
+      dengan budget kecil, saya cukup pakai standardized attribution dan monitoring
+      biasa, tidak perlu causal inference yang canggih untuk semuanya. Tapi untuk
+      campaign strategis dengan budget besar, saya akan masuk lebih dalam, pakai
+      holdout group dan causal analysis, karena keputusan yang diambil dari situ
+      dampaknya jauh lebih besar."
+    </p>
+
+    <blockquote>
+      Catatan penutup: sepanjang bagian A/B testing ini, pola yang saya sadari
+      adalah interviewer terus menggali satu layer lebih dalam dari jawaban
+      sebelumnya. Jawaban yang baik bukan yang paling panjang, tapi yang tetap
+      solid ketika ditanya "lalu bagaimana kamu tahu itu benar?"
+    </blockquote>
+
+    <h2>Penutup</h2>
+
+    <p>
+      Yang saya sadari setelah sesi ini selesai: technical interview level senior
+      tidak benar-benar menguji apakah saya bisa menulis query atau kode yang
+      jalan. Itu dianggap sudah baseline. Yang benar-benar diuji adalah apakah saya
+      berhenti untuk berpikir sebelum menjawab, dan apakah saya bisa mempertahankan
+      logika saya ketika didorong lebih jauh.
+    </p>
+
+    <p>
+      Di artikel berikutnya saya akan rekonstruksi business interview-nya, yang
+      formatnya sangat berbeda. Tidak ada satu baris kode pun, tapi tetap sama
+      menantangnya.
+    </p>
+
+  </article>
+
+  <div class="post-divider"></div>
+
+  <div class="post-tags">
+    <span class="tag-chip">interview-tips</span>
+    <span class="tag-chip">technical-interview</span>
+    <span class="tag-chip">sql</span>
+    <span class="tag-chip">python</span>
+    <span class="tag-chip">ab-testing</span>
+    <span class="tag-chip">karir-luar-negeri</span>
+  </div>
+
+  <div class="post-ig-cta">
+    <p>Versi ringkas dari artikel ini ada di Instagram. Lebih compact, cocok untuk disimpan.</p>
+    <a href="https://instagram.com/indoinestonia" target="_blank" class="btn btn-primary btn-sm">
+      Lihat di @IndoInEstonia ↗
+    </a>
+  </div>
+
+  <div class="post-nav" style="margin-top:2rem;">
+    <a href="post-002.html" class="post-nav-link prev">
+      <div class="post-nav-label">&larr; Sebelumnya</div>
+      <div class="post-nav-title">#002 Lima Tahap Interview Data Analyst di Perusahaan Ride-Hailing Global</div>
+    </a>
+    <a href="post-004.html" class="post-nav-link next">
+      <div class="post-nav-label">Selanjutnya &rarr;</div>
+      <div class="post-nav-title">#004 Simulasi Business Interview Data Analyst</div>
+    </a>
+  </div>
+
+</main>
+
+<!-- ========= FOOTER ========= -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="nav-logo">
+          Halo<span class="dot" style="color:#1E50DC">.</span>Career
+        </div>
+        <p>Catatan perjalanan karir dari Jakarta ke Tallinn. Jujur, personal, dan bisa jadi pelajaran.</p>
+      </div>
+      <nav class="footer-nav">
+        <div class="fn-group">
+          <h4>Topik</h4>
+          <ul>
+            <li><a href="#">Mencari Kerja</a></li>
+            <li><a href="#">Administrasi</a></li>
+            <li><a href="#">Bulan Pertama</a></li>
+            <li><a href="#">Adaptasi</a></li>
+          </ul>
+        </div>
+        <div class="fn-group">
+          <h4>Lainnya</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="#">Semua Artikel</a></li>
+            <li><a href="https://instagram.com/indoinestonia" target="_blank">@IndoInEstonia</a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Halo Career. Dibuat dengan &hearts; dari Tallinn.</span>
+      <div class="footer-flags">🇮🇩 🤝 🇪🇪</div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
